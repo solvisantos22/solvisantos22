@@ -14,15 +14,32 @@ I work with machine learning and numerical methods, and I'm building tools for l
 
 **Ratatoskur** is an iPad maths notebook I'm building with Jóhannes Reykdal Einarsson and Sævar Breki Snorrason. Students write with Apple Pencil and can ask for a hint, check a step or see a worked solution in Icelandic. Teachers can assign exercises and review the work students submit.
 
+<details open>
+<summary>Watch a short lesson</summary>
+
+<picture>
+  <source media="(prefers-reduced-motion: reduce)" srcset="assets/ratatoskur-static.svg">
+  <source media="(prefers-color-scheme: dark)" srcset="assets/ratatoskur-dark.svg">
+  <img src="assets/ratatoskur.svg" alt="A scripted Ratatoskur example: solve 2x + 3 = 11 using a hint, confirm an unclear symbol and check that x = 4.">
+</picture>
+
+A scripted example based on the prototype. [Static view](assets/ratatoskur-static.svg).
+
+</details>
+
 A misread handwritten symbol can change the problem, so the app asks for clarification when the reading is uncertain. Students can keep writing, save their notebook and return to earlier attempts. The app uses SwiftUI and PencilKit, with a FastAPI backend. It's still a prototype; handling unclear handwriting and keeping the feedback connected to the student's actual work are ongoing parts of it.
 
-[Guided lesson](https://solvi-lab.solvisantos.chatgpt.site/#ratatoskur) · [iOS app](https://github.com/solvisantos22/ratatoskur_ios) · [Backend](https://github.com/solvisantos22/ratatoskur_backend)
+[iOS app](https://github.com/solvisantos22/ratatoskur_ios) · [Backend](https://github.com/solvisantos22/ratatoskur_backend) · [Interactive walkthrough](https://solvi-lab.solvisantos.chatgpt.site/#ratatoskur)
 
 ## ELVA video denoising
 
 For my ELVA project, I evaluated FastDVDnet and SwinIR on multi-camera video recorded at 250 to 400 FPS. The footage contained noise, clipping and compression artifacts. There was no clean reference recording to compare against, which made evaluating the results difficult.
 
 I tested and fine-tuned denoising models, including self-supervised approaches, and compared image quality, runtime and compression efficiency. The question was how much useful detail could be recovered, and at what computational cost. The experiments and results are in my [final report](https://github.com/solvisantos22/ElvaReport).
+
+[![The same ELVA video crop shown as noisy input, after pretrained FastDVDnet, and after fine-tuning.](assets/elva-denoising.png)](assets/elva-denoising.png)
+
+Noisy input, pretrained FastDVDnet, then the same model after fine-tuning. This crop from the report shows the tradeoff between removing noise and preserving texture.
 
 ## Réttarvísir
 
