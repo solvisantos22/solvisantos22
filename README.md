@@ -16,7 +16,7 @@ I work with machine learning and numerical methods, and I'm building tools for l
 
 A misread handwritten symbol can change the problem, so the app asks for clarification when the reading is uncertain. Students can keep writing, save their notebook and return to earlier attempts. The app uses SwiftUI and PencilKit, with a FastAPI backend. It's still a prototype; handling unclear handwriting and keeping the feedback connected to the student's actual work are ongoing parts of it.
 
-[iOS app](https://github.com/solvisantos22/ratatoskur_ios) · [Backend](https://github.com/solvisantos22/ratatoskur_backend)
+[Guided lesson](https://solvi-lab.solvisantos.chatgpt.site/#ratatoskur) · [iOS app](https://github.com/solvisantos22/ratatoskur_ios) · [Backend](https://github.com/solvisantos22/ratatoskur_backend)
 
 ## ELVA video denoising
 
@@ -43,7 +43,7 @@ In [Romberg](https://github.com/solvisantos22/Romberg), I compare two ways to in
   <img src="assets/romberg.svg" alt="The surface f(x,y) = x² + y² over the unit square, refined from two triangles to 512.">
 </picture>
 
-[Code for this example](https://github.com/solvisantos22/Romberg/blob/master/romberg2.py) · [Static view](assets/romberg-static.svg)
+[Interactive experiment](https://solvi-lab.solvisantos.chatgpt.site/#romberg) · [Code for this example](https://github.com/solvisantos22/Romberg/blob/master/romberg2.py) · [Static view](assets/romberg-static.svg)
 
 </details>
 
