@@ -34,6 +34,19 @@ Icelandic inflection and the difference between everyday questions and legal wor
 
 In [Romberg](https://github.com/solvisantos22/Romberg), I compare two ways to integrate functions over a unit square: a rectangular grid with the trapezoidal rule, and a triangular mesh sampled at each triangle's centre. Both use Romberg-style extrapolation as the grid is refined. The Python experiments compare error and runtime on smooth and oscillatory functions, using SciPy integration as a numerical reference.
 
+<details open>
+<summary>See the mesh refine</summary>
+
+<picture>
+  <source media="(prefers-reduced-motion: reduce)" srcset="assets/romberg-static.svg">
+  <source media="(prefers-color-scheme: dark)" srcset="assets/romberg-dark.svg">
+  <img src="assets/romberg.svg" alt="The surface f(x,y) = x² + y² over the unit square, refined from two triangles to 512.">
+</picture>
+
+[Code for this example](https://github.com/solvisantos22/Romberg/blob/master/romberg2.py) · [Static view](assets/romberg-static.svg)
+
+</details>
+
 I've also worked on data analysis and reporting within risk management at Íslandsbanki.
 
 [LinkedIn](https://www.linkedin.com/in/s%C3%B6lvi-santos-226611264/) · [Email](mailto:solvisantos22@gmail.com)
