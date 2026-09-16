@@ -13,4 +13,10 @@
 - [x] Add .github/workflows/contributions.yml with a daily schedule, manual trigger, relevant main-branch push trigger, pinned checkout, tests, live generation, and a narrow assets-only commit.
 - [x] Generate the real assets and run the tests. Preview both themes and motion preferences, including mobile widths.
 - [x] Obtain an independent review, resolve actionable issues, check the remote has not changed, and publish the verified update.
-- [ ] Run the actual GitHub Action and inspect the rendered GitHub profile and its image sources.
+- [x] Run the actual GitHub Action and inspect the rendered GitHub profile and its image sources.
+
+## Verification
+
+All four generator tests passed locally and in [the first GitHub Actions run](https://github.com/solvisantos22/solvisantos22/actions/runs/35103678850). The repository token successfully generated all three images from 368 calendar days and 660 contributions.
+
+Browser checks passed at desktop and mobile widths with no horizontal overflow. The animation settles after 3.4 seconds and stops entirely under reduced motion. The published GitHub profile was checked directly: light, dark, and reduced-motion preferences each load the corresponding image successfully. The grid sits below the introduction so the initial wave is visible before scrolling through project descriptions.
