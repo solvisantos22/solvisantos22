@@ -45,6 +45,19 @@ Noisy input, pretrained FastDVDnet, then the same model after fine-tuning. This 
 
 Jóhannes and I built [Réttarvísir](https://github.com/solvisantos22/maltaekni_lokaverkefni), an Icelandic consumer-rights retrieval prototype for an NLP course. It retrieves passages from selected laws, uses them to answer questions and shows the supporting citations. We compare BM25 with embedding search, combinations of the two through reciprocal rank fusion, and reranking.
 
+<details open>
+<summary>Follow a question to its sources</summary>
+
+<picture>
+  <source media="(prefers-reduced-motion: reduce)" srcset="assets/rettarvisir-static.svg">
+  <source media="(prefers-color-scheme: dark)" srcset="assets/rettarvisir-dark.svg">
+  <img src="assets/rettarvisir.svg" alt="Réttarvísir follows an Icelandic question about repair or replacement through BM25 and BGE-M3 retrieval, rank fusion and reranking, then shows the recorded answer with citations to the retrieved legal articles.">
+</picture>
+
+An illustration of a saved evaluation example, with an excerpt of the recorded answer. [Static view](assets/rettarvisir-static.svg) · [Full example](https://github.com/solvisantos22/maltaekni_lokaverkefni/blob/f64cc658bd0bf27a589d26df135c3560d89f4c9c/reports/evaluation/evaluation_details_latest.jsonl#L25).
+
+</details>
+
 Icelandic inflection and the difference between everyday questions and legal wording make retrieval less straightforward. We used a fixed set of questions and a manual review interface to compare the retrieved passages and the answers built from them. The code and final report are in the repository.
 
 ## Romberg integration
