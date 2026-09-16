@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate a quiet contribution-calendar SVG using only the standard library."""
+"""Generate a contribution-calendar SVG using only the standard library."""
 
 import argparse
 from datetime import date, timedelta
@@ -70,28 +70,80 @@ def color_rules(theme):
     return f"text{{fill:{text}}}" + "".join(f".level-{i}{{fill:{color}}}" for i, color in enumerate(palette))
 
 
+def gravity_motion(days, width):
+    """Give active days distinct, deterministic places in a compact seven-row heap."""
+    active = [item for item in days if item[3] > 0]
+    # Fill the floor before its supported layers, with a lower roof at both edges.
+    slots = [(column, row) for row in range(7) for column in range(-32, 33)]
+    slots.sort(key=lambda slot: (abs(slot[0] + (slot[1] % 2) / 2) + 2 * slot[1], slot[1], slot[0]))
+    slots = sorted(slots[:len(active)], key=lambda slot: (slot[0] + (slot[1] % 2) / 2, slot[1]))
+    rules, names = [], {}
+    last_column = max(item[0] for item in days)
+    for index, ((column, weekday, day, _, _), (pile_column, pile_row)) in enumerate(zip(active, slots)):
+        seed = day.toordinal()
+        name = f"gravity-{index}"
+        names[day] = name
+        pile_x = width / 2 + (pile_column + (pile_row % 2) / 2) * 11.5
+        pile_y = 244 - pile_row * 11 + (seed % 5 - 2) * .25
+        dx, dy = pile_x - (21.5 + column * 15), pile_y - (62.5 + weekday * 15)
+        direction = -1 if seed % 2 else 1
+        angle = direction * (360 + (seed // 2 % 2) * 360) + seed % 35 - 17
+        release = 6 + pile_row + seed % 11 / 10
+        impact = release + 26
+        rebound = min(13, dy * .15)
+        return_start = 62 + 4 * column / max(last_column, 1)
+        return_end = 94 + 3 * column / max(last_column, 1)
+        frames = [(0, 0, 0, 0, ""), (release, 0, 0, 0, "")]
+        # Horizontal drift stays steady while vertical distance follows gravity.
+        for step in range(1, 6):
+            progress = step / 5
+            frames.append((release + 26 * progress, dx * progress,
+                           dy * progress ** 2, angle * progress, ""))
+        frames.extend([
+            (impact + 4, dx + direction * 2, dy - rebound, angle + direction * 18, ""),
+            (impact + 7, dx, dy, angle, ""),
+            (impact + 9, dx - direction, dy - rebound * .25, angle - direction * 6, ""),
+            (impact + 11, dx, dy, angle, ""),
+            (52, dx, dy, angle, ""),
+            (return_start, dx, dy, angle, "animation-timing-function:cubic-bezier(.4,0,.2,1);"),
+            (return_end, 0, 0, 0, ""),
+            (100, 0, 0, 0, ""),
+        ])
+        rules.append(f"@keyframes {name} {{")
+        for percent, x, y, rotation, easing in frames:
+            rules.append(f"  {percent:.3f}% {{ transform: translate({x:.3f}px, {y:.3f}px) rotate({rotation:.3f}deg); {easing}}}")
+        rules.append("}")
+    return "\n".join(rules), names
+
+
 def render(total, days, theme="light", animated=True):
     first, last = min(d[2] for d in days), max(d[2] for d in days)
     columns = max(d[0] for d in days) + 1
     width = max(828, columns * 15 + 32)
     title = f"{total:,} contributions · {first.isoformat()} to {last.isoformat()}"
     style = color_rules(theme)
+    motion_names = {}
     if animated:
         style += """
-        .week { animation: wave .8s ease-in-out 1 both; }
-        @keyframes wave {
-          0%, 100% { transform: translateY(0); }
-          45% { transform: translateY(-3px); }
+        .falling-cell {
+          animation-duration: 4.8s;
+          animation-timing-function: linear;
+          animation-iteration-count: 1;
+          animation-fill-mode: both;
+          transform-box: fill-box;
+          transform-origin: center;
         }
-        @media (prefers-reduced-motion: reduce) { .week { animation: none; } }
+        @media (prefers-reduced-motion: reduce) { .falling-cell { animation: none; transform: none; } }
         """
+        paths, motion_names = gravity_motion(days, width)
+        style += paths
     else:
         style += "@media (prefers-color-scheme: dark){" + color_rules("dark") + "}"
     parts = [
-        f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="188" viewBox="0 0 {width} 188" role="img" aria-labelledby="title desc">',
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="280" viewBox="0 0 {width} 280" role="img" aria-labelledby="title desc">',
         f"<title id=\"title\">{escape(title)}</title>",
         '<desc id="desc">Each square is one day; darker green in the light theme or brighter green in the dark theme means more contributions. The calendar uses GitHub contribution levels. '
-        + ("A single gentle wave settles within 3.4 seconds. " if animated else "This is the still version. ")
+        + ("Active squares tumble into a pile, then return to their exact dates within 4.8 seconds. " if animated else "This is the still version. ")
         + 'Empty days remain empty.</desc>',
         f"<style>{style}</style>",
         '<g font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="12">',
@@ -106,23 +158,30 @@ def render(total, days, theme="light", animated=True):
                 labels.pop()
             labels.append((column, day.strftime("%b")))
     parts.extend(f'<text x="{16 + column * 15}" y="46">{month}</text>' for column, month in labels)
+    moving_cells = []
     for column in range(columns):
-        delay = 2.6 * column / max(columns - 1, 1)
-        attrs = f' class="week" style="animation-delay:{delay:.3f}s"' if animated else ""
-        parts.append(f"<g{attrs}>")
+        parts.append("<g>")
         for col, weekday, day, count, level in days:
             if col != column:
                 continue
-            parts.append(
+            if day in motion_names:
+                parts.append(f'<rect x="{16 + col * 15}" y="{57 + weekday * 15}" width="11" height="11" rx="2" class="level-0" aria-hidden="true"/>')
+            cell = (
                 f'<rect x="{16 + col * 15}" y="{57 + weekday * 15}" width="11" height="11" rx="2" '
                 f'class="level-{level}" data-date="{day.isoformat()}" data-count="{count}">'
                 f'<title>{day.isoformat()}: {count} contribution{"s" if count != 1 else ""}</title></rect>'
             )
+            if day in motion_names:
+                moving_cells.append(f'<g class="falling-cell" style="animation-name:{motion_names[day]}">{cell}</g>')
+            else:
+                parts.append(cell)
         parts.append("</g>")
-    parts.append(f'<text x="{width - 150}" y="179">Less</text>')
+    # Keep falling squares above the entire stationary grid during their flight.
+    parts.extend(moving_cells)
+    parts.append(f'<text x="{width - 150}" y="270">Less</text>')
     for i in range(5):
-        parts.append(f'<rect x="{width - 119 + i * 15}" y="169" width="11" height="11" rx="2" class="level-{i}"/>')
-    parts.extend([f'<text x="{width - 16}" y="179" text-anchor="end">More</text>', "</g></svg>"])
+        parts.append(f'<rect x="{width - 119 + i * 15}" y="260" width="11" height="11" rx="2" class="level-{i}"/>')
+    parts.extend([f'<text x="{width - 16}" y="270" text-anchor="end">More</text>', "</g></svg>"])
     return "\n".join(parts) + "\n"
 
 

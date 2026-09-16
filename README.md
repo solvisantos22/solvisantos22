@@ -1,6 +1,6 @@
 # Sölvi Santos
 
-I build software around maths, from numerical integration to tools for learning it. My background is in computer science and mathematics at the University of Iceland.
+I work with machine learning and numerical methods, and I'm building tools for learning maths. My background is in computer science and mathematics at the University of Iceland.
 
 <picture>
   <source media="(prefers-reduced-motion: reduce)" srcset="assets/contributions-static.svg">
@@ -12,16 +12,28 @@ I build software around maths, from numerical integration to tools for learning 
 
 ## Currently building
 
-**Ratatoskur** — an iPad maths notebook I'm building with a small team. Students write with Apple Pencil and ask for hints or step checks in Icelandic. It's an active prototype, with a SwiftUI app and a backend for feedback and classroom work.
+**Ratatoskur** is an iPad maths notebook I'm building with Jóhannes Reykdal Einarsson and Sævar Breki Snorrason. Students write with Apple Pencil and can ask for a hint, check a step or see a worked solution in Icelandic. Teachers can assign exercises and review the work students submit.
+
+A misread handwritten symbol can change the problem, so the app asks for clarification when the reading is uncertain. Students can keep writing, save their notebook and return to earlier attempts. The app uses SwiftUI and PencilKit, with a FastAPI backend. It's still a prototype; handling unclear handwriting and keeping the feedback connected to the student's actual work are ongoing parts of it.
 
 [iOS app](https://github.com/solvisantos22/ratatoskur_ios) · [Backend](https://github.com/solvisantos22/ratatoskur_backend)
 
-## Selected work
+## ELVA video denoising
 
-- **[ELVA video denoising](https://github.com/solvisantos22/ElvaReport)** — my report on denoising multi-camera video recorded at 250–400 FPS. I evaluated FastDVDnet and SwinIR, comparing image quality and runtime on noisy footage without clean reference data.
-- **[Réttarvísir](https://github.com/solvisantos22/maltaekni_lokaverkefni)** — an Icelandic consumer-rights retrieval prototype built with Jóhannes Reykdal Einarsson. We compare BM25, embeddings and reranking, and show the source citations behind each answer.
-- **[Romberg integration](https://github.com/solvisantos22/Romberg)** — experiments with rectangular and triangular grids for 2D integration, comparing accuracy, convergence and runtime across test functions.
+For my ELVA project, I evaluated FastDVDnet and SwinIR on multi-camera video recorded at 250 to 400 FPS. The footage contained noise, clipping and compression artifacts. There was no clean reference recording to compare against, which made evaluating the results difficult.
 
-I've also worked on data analysis and reporting in risk management at Íslandsbanki.
+I tested and fine-tuned denoising models, including self-supervised approaches, and compared image quality, runtime and compression efficiency. The question was how much useful detail could be recovered, and at what computational cost. The experiments and results are in my [final report](https://github.com/solvisantos22/ElvaReport).
+
+## Réttarvísir
+
+Jóhannes and I built [Réttarvísir](https://github.com/solvisantos22/maltaekni_lokaverkefni), an Icelandic consumer-rights retrieval prototype for an NLP course. It retrieves passages from selected laws, uses them to answer questions and shows the supporting citations. We compare BM25 with embedding search, combinations of the two through reciprocal rank fusion, and reranking.
+
+Icelandic inflection and the difference between everyday questions and legal wording make retrieval less straightforward. We used a fixed set of questions and a manual review interface to compare the retrieved passages and the answers built from them. The code and final report are in the repository.
+
+## Romberg integration
+
+In [Romberg](https://github.com/solvisantos22/Romberg), I compare two ways to integrate functions over a unit square: a rectangular grid with the trapezoidal rule, and a triangular mesh sampled at each triangle's centre. Both use Romberg-style extrapolation as the grid is refined. The Python experiments compare error and runtime on smooth and oscillatory functions, using SciPy integration as a numerical reference.
+
+I've also worked on data analysis and reporting within risk management at Íslandsbanki.
 
 [LinkedIn](https://www.linkedin.com/in/s%C3%B6lvi-santos-226611264/) · [Email](mailto:solvisantos22@gmail.com)

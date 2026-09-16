@@ -1,6 +1,6 @@
 # Contribution calendar
 
-The profile embeds an image generated from GitHub's contribution calendar API. It does not modify the native contribution calendar or invent activity. A single 3.4-second wave settles into the original grid. Reduced-motion visitors get a static image, also available through the profile's still-image link.
+The profile embeds an image generated from GitHub's contribution calendar API. It does not modify the native contribution calendar or invent activity. Active squares tumble into a pile, pause, and return to their original positions in one 4.8-second sequence. Empty days stay in place. The movement is decorative; dates, counts and contribution levels do not change. Reduced-motion visitors get a static image, also available through the profile's still-image link.
 
 The workflow refreshes images daily at 09:23 UTC and can be run manually from **Actions → Refresh contribution calendar → Run workflow**. GitHub can delay schedules, and it can disable scheduled workflows in public repositories after 60 days of inactivity. If necessary, re-enable the workflow in Actions and run it manually. Existing images remain available when a refresh fails.
 
